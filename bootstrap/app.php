@@ -116,4 +116,6 @@ $app->router->group([
     require __DIR__.'/../routes/web.php';
 });
 
+\Dusterio\LumenPassport\LumenPassport::routes($app, ['prefix' => 'v1/oauth']);
+
 return $app;
