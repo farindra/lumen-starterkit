@@ -17,5 +17,15 @@ class BaseController extends Controller
         $this->lumen = new Lumen();
 
     }
+        
+    /**
+     * handling missing Method
+     *
+     * @return mixed
+     */
+    public function missingMethod(){
+
+        return $this->lumen->setResponse();
+    }
 
 }

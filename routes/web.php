@@ -13,6 +13,29 @@
 |
 */
 
-$router->get('/', function () use ($router) {
+/* v1 group */
+$router->group(['prefix' => 'v1'], function () use ($router) {
+
+    renderRoutes('v1', $router);
+    
+});
+
+/* lumen version */
+$router->get('/version', function () use ($router) {
     return $router->app->version();
 });
+
+/**
+ * render Routes files
+ *
+ * @param  string $folder folder under routes/*
+ * @param  object $router
+ * @return void
+ */
+function renderRoutes($folder, $router){
+
+    foreach (glob( app()->basePath() . "/routes/{$folder}/*.php") as $filename)
+    {
+        include $filename;
+    }
+}
