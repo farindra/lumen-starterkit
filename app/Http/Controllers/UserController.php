@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\User;
-use Validator;
+use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
-class UsersController extends Controller
+class UserController extends BaseController
 {
 
 
     public function register(Request $request)
     {
+        /* validation requirement */
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email',
@@ -20,7 +22,8 @@ class UsersController extends Controller
         ]);
 
         if($validator->fails()){
-            return response(['message' => 'Validation errors', 'errors' =>  $validator->errors(), 'status' => false], 422);
+
+            return $this->lumen->setResponse('error', $validator->messages()->first(), NULL, false , 400  );
         }
 
         $input = $request->all();

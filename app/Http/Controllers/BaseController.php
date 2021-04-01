@@ -1,10 +1,11 @@
 <?php
 namespace app\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use app\Libraries\Lumen;
+use App\Libraries\Lumen;
 
-class BaseController extends Controller 
+class BaseController extends Controller
 {
     /**
      * our application library
