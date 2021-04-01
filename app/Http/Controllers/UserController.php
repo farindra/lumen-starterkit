@@ -15,15 +15,11 @@ class UserController extends BaseController
     public function register(Request $request)
     {
         /* validation requirement */
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
+        $validator = $this->validation('registration', $request);
 
         if($validator->fails()){
 
-            return $this->lumen->setResponse('error', $validator->messages()->first(), NULL, false , 400  );
+            return $this->core->setResponse('error', $validator->messages()->first(), NULL, false , 400  );
         }
 
         $input = $request->all();
@@ -31,10 +27,40 @@ class UserController extends BaseController
         $user = User::create($input);
       
         /**Take note of this: Your user authentication access token is generated here **/
-        $data['token'] =  $user->createToken('MyApp')->accessToken;
-        $data['name'] =  $user->name;
+        $data['token'] =  $user->createToken(env('APP_NAME', 'Lumen'), [''])->accessToken;
+        $data['firstname'] =  $user->firstname;
+        $data['lastname'] =  $user->lastname;
 
         return response(['data' => $data, 'message' => 'Account created successfully!', 'status' => true]);
     }  
-     
+         
+    /**
+     * validation requirement
+     *
+     * @param  string $type
+     * @param  request $request
+     * @return object
+     */
+    private function validation($type = null, $request) {
+
+        switch ($type) {
+
+            case 'registration':
+
+                $validator = [
+                    'firstname' => 'required|max:50|min:2',
+                    'lastname' => 'required|max:100|min:2',
+                    'email' => 'required|email|unique:users',
+                    'password' => 'required'
+                ];
+                
+                break;
+
+            default:
+                
+                $validator = [];
+        }
+        
+        return Validator::make($request->all(), $validator);
+    }
 }

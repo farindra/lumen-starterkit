@@ -2,20 +2,20 @@
 namespace app\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use app\Libraries\Core;
 use Illuminate\Http\Request;
-use App\Libraries\Lumen;
 
 class BaseController extends Controller
 {
     /**
      * our application library
      */
-    public $lumen ;
+    public $core ;
 
     public function __construct(Request $request){
         
-        /** define Lumen as global Library */
-        $this->lumen = new Lumen();
+        /** define Core as global Library */
+        $this->core = new Core();
 
     }
         
@@ -26,7 +26,7 @@ class BaseController extends Controller
      */
     public function missingMethod(){
 
-        return $this->lumen->setResponse();
+        return $this->core->setResponse();
     }
 
 }

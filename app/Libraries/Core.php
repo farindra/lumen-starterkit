@@ -3,7 +3,7 @@ namespace app\Libraries;
 
 use Illuminate\Support\Facades\Log;
 
-class Lumen
+class Core
 {
     /**
      * Custom Response HTTP
