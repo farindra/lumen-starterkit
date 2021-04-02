@@ -82,6 +82,22 @@ class Core
 
     
     }
+
+
+    /**
+     * render Routes files
+     *
+     * @param  string $folder folder under routes/*
+     * @param  object $router
+     * @return void
+     */
+    public static function renderRoutes($folder, $router){
+
+        foreach (glob( app()->basePath() . "/routes/{$folder}/*.php") as $filename)
+        {
+            require $filename;
+        }
+    }
     
     /**
      * generate Random String
