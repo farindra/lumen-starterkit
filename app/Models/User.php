@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 use Laravel\Passport\HasApiTokens;
+use Ramsey\Uuid\Provider\Node\RandomNodeProvider;
+use Ramsey\Uuid\Uuid;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
@@ -35,4 +37,25 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+    /** 
+     * Indicates if the IDs are UUID's. 
+     * 
+     * @var bool 
+     */ 
+    public $incrementing = false; 
+
+    public static function boot()
+    { 
+         parent::boot();
+
+         static::creating(function ($model) {
+
+            $nodeProvider = new RandomNodeProvider();
+
+            $uuid = Uuid::uuid1($nodeProvider->getNode());
+            
+            $model->id = $uuid; 
+         }); 
+    } 
 }

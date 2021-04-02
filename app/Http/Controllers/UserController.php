@@ -10,14 +10,19 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends BaseController
 {
-
-
+    
+    /**
+     * register user
+     *
+     * @param  Request $request
+     * @return Json
+     */
     public function register(Request $request)
     {
         /* validation requirement */
         $validator = $this->validation('registration', $request);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
 
             return $this->core->setResponse('error', $validator->messages()->first(), NULL, false , 400  );
         }
@@ -25,14 +30,36 @@ class UserController extends BaseController
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
         $user = User::create($input);
-      
-        /**Take note of this: Your user authentication access token is generated here **/
-        $data['token'] =  $user->createToken(env('APP_NAME', 'Lumen'), [''])->accessToken;
-        $data['firstname'] =  $user->firstname;
-        $data['lastname'] =  $user->lastname;
 
-        return response(['data' => $data, 'message' => 'Account created successfully!', 'status' => true]);
+        return $this->core->setResponse('success', 'Account created successfully!', $user );
     }  
+
+    public function login(Request $request) {
+
+        /* validation requirement */
+        $validator = $this->validation('login', $request);
+
+        if ($validator->fails()) {
+
+            return $this->core->setResponse('error', $validator->messages()->first(), NULL, false , 400  );
+        }
+
+        if ( $user = User::where('email', $request->email)->first() ) {
+
+            if (Hash::check($request->password, $user->password)) {
+
+                /**Take note of this: Your user authentication access token is generated here **/
+                $data['token'] =  $user->createToken(env('APP_NAME', 'Lumen'), [''])->accessToken;
+                $data['firstname'] =  $user->firstname;
+                $data['lastname'] =  $user->lastname;
+
+                return $this->core->setResponse('success', 'Login Success', $data );
+            }
+        }
+
+        return $this->core->setResponse('error', 'Please check your email or password !', NULL, false , 400  );
+
+    }
          
     /**
      * validation requirement
@@ -56,16 +83,31 @@ class UserController extends BaseController
                 
                 break;
 
+            case 'login':
+
+                $validator = [
+                    'email' => 'required|string',
+                    'password' => 'required|string',
+                ];
+
+                break;
+
             default:
                 
                 $validator = [];
         }
-        
-        return Validator::make($request->all(), $validator);
-    }
 
+        return Validator::make($request->all(), $validator);
+        
+    }
+    
+    /**
+     * user profile
+     *
+     * @return Json
+     */
     public function profile() {
 
-        return auth()->user();
+        return $this->core->setResponse('success', 'User Profile',  auth()->user());
     }
 }

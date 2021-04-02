@@ -205,7 +205,7 @@ class UserRegistrationTest extends TestCase
         ]);
 
         $request->response->assertJson([
-            'message' => 'Account created successfully!'
+            'success' => 'Account created successfully!'
         ])->assertStatus(200);
 
     }
