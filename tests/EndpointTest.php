@@ -1,8 +1,5 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
-
 class EndpointTest extends TestCase
 {
     /**
@@ -10,9 +7,9 @@ class EndpointTest extends TestCase
      *
      * @return void
      */
-    public function test_base_path()
+    public function test_unknown_path_should_404()
     {
-        $request = $this->get('/');
+        $request = $this->get('/any/random/endpoint');
 
         $request->response->assertJson([
             'error' => true,
@@ -29,7 +26,7 @@ class EndpointTest extends TestCase
 
     }
 
-    public function test_ping() {
+    public function test_ping_should_return_pong() {
 
         $request = $this->get('/v1/ping');
 

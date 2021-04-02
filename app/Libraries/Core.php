@@ -105,7 +105,7 @@ class Core
      * @param  integer $length max character length
      * @return string
      */
-    public function generateRandomString($length = 5) {
+    public static function generateRandomString($length = 5) {
 
         $characters = config('erm.error.random_string', 'ABCDEFGHJKLMNPQRTUVWXYZ') ;
         

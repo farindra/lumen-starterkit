@@ -51,7 +51,7 @@ class UserController extends BaseController
                     'firstname' => 'required|max:50|min:2',
                     'lastname' => 'required|max:100|min:2',
                     'email' => 'required|email|unique:users',
-                    'password' => 'required'
+                    'password' => 'required|min:6|max:100',
                 ];
                 
                 break;
