@@ -63,4 +63,9 @@ class UserController extends BaseController
         
         return Validator::make($request->all(), $validator);
     }
+
+    public function profile() {
+
+        return auth()->user();
+    }
 }
